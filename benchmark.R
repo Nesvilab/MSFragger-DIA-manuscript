@@ -18,9 +18,7 @@ setwd("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\code\\MSFragger-DIA-
 
 
 # load annotation data
-human <- read_tsv("uniprot_human_tabular.tab")
-ecoli <- read_tsv("uniprot-ecoli_tabular.tab")
-annotation <- rbind(human, ecoli)
+annotation <- read_tsv("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\code\\MSFragger-DIA-manuscript\\uniprot.tab", col_select = c("Entry", "Organism"))
 
 
 #### list library stats ####
@@ -244,45 +242,45 @@ prec_IDs$Origin <- factor(prec_IDs$Origin)
 tool <- "Spectronaut"
 yy <- prec_IDs[prec_IDs$Condition == "Lymphnode" & prec_IDs$Origin == tool, ]
 a <- median(yy[yy$Organism == "Escherichia coli (strain K12)", ]$Precursors)
-b <- median(yy[yy$Organism == "Homo sapiens (Human)", ]$Precursors)
+b <- median(yy[yy$Organism == "Homo sapiens", ]$Precursors)
 sprintf("%s, %d, %d, %.3f, NA", tool, a, b, a * 100 / b)
 
 tool <- "DIA-NN"
 yy <- prec_IDs[prec_IDs$Condition == "Lymphnode" & prec_IDs$Origin == tool, ]
 a <- median(yy[yy$Organism == "Escherichia coli (strain K12)", ]$Precursors)
-b <- median(yy[yy$Organism == "Homo sapiens (Human)", ]$Precursors)
+b <- median(yy[yy$Organism == "Homo sapiens", ]$Precursors)
 c <- diann_lib_precursors[diann_lib_precursors$Organism == "Escherichia coli (strain K12)", ]$Precursors
-d <- diann_lib_precursors[diann_lib_precursors$Organism == "Homo sapiens (Human)", ]$Precursors
+d <- diann_lib_precursors[diann_lib_precursors$Organism == "Homo sapiens", ]$Precursors
 sprintf("%s, %d, %d, %.3f, %.3f", tool, a, b, a * 100 / b, a * (d - b) * 100 / (b * c))
 
 tool <- "MSFragger"
 yy <- prec_IDs[prec_IDs$Condition == "Lymphnode" & prec_IDs$Origin == tool, ]
 a <- median(yy[yy$Organism == "Escherichia coli (strain K12)", ]$Precursors)
-b <- median(yy[yy$Organism == "Homo sapiens (Human)", ]$Precursors)
+b <- median(yy[yy$Organism == "Homo sapiens", ]$Precursors)
 c <- msfraggerdia_lib_precursors[msfraggerdia_lib_precursors$Organism == "Escherichia coli (strain K12)", ]$Precursors
-d <- msfraggerdia_lib_precursors[msfraggerdia_lib_precursors$Organism == "Homo sapiens (Human)", ]$Precursors
+d <- msfraggerdia_lib_precursors[msfraggerdia_lib_precursors$Organism == "Homo sapiens", ]$Precursors
 sprintf("%s, %d, %d, %.3f, %.3f", tool, a, b, a * 100 / b, a * (d - b) * 100 / (b * c))
 
 tool <- "MSFragger experimental spectra"
 yy <- prec_IDs[prec_IDs$Condition == "Lymphnode" & prec_IDs$Origin == tool, ]
 a <- median(yy[yy$Organism == "Escherichia coli (strain K12)", ]$Precursors)
-b <- median(yy[yy$Organism == "Homo sapiens (Human)", ]$Precursors)
+b <- median(yy[yy$Organism == "Homo sapiens", ]$Precursors)
 c <- msfraggerdia_lib_precursors[msfraggerdia_lib_precursors$Organism == "Escherichia coli (strain K12)", ]$Precursors
-d <- msfraggerdia_lib_precursors[msfraggerdia_lib_precursors$Organism == "Homo sapiens (Human)", ]$Precursors
+d <- msfraggerdia_lib_precursors[msfraggerdia_lib_precursors$Organism == "Homo sapiens", ]$Precursors
 sprintf("%s, %d, %d, %.3f, %.3f", tool, a, b, a * 100 / b, a * (d - b) * 100 / (b * c))
 
 tool <- "MSFragger hybrid"
 yy <- prec_IDs[prec_IDs$Condition == "Lymphnode" & prec_IDs$Origin == tool, ]
 a <- median(yy[yy$Organism == "Escherichia coli (strain K12)", ]$Precursors)
-b <- median(yy[yy$Organism == "Homo sapiens (Human)", ]$Precursors)
+b <- median(yy[yy$Organism == "Homo sapiens", ]$Precursors)
 c <- msfraggerdiadda_lib_precursors[msfraggerdiadda_lib_precursors$Organism == "Escherichia coli (strain K12)", ]$Precursors
-d <- msfraggerdiadda_lib_precursors[msfraggerdiadda_lib_precursors$Organism == "Homo sapiens (Human)", ]$Precursors
+d <- msfraggerdiadda_lib_precursors[msfraggerdiadda_lib_precursors$Organism == "Homo sapiens", ]$Precursors
 sprintf("%s, %d, %d, %.3f, %.3f", tool, a, b, a * 100 / b, a * (d - b) * 100 / (b * c))
 
 tool <- "MSFragger hybrid experimental spectra"
 yy <- prec_IDs[prec_IDs$Condition == "Lymphnode" & prec_IDs$Origin == tool, ]
 a <- median(yy[yy$Organism == "Escherichia coli (strain K12)", ]$Precursors)
-b <- median(yy[yy$Organism == "Homo sapiens (Human)", ]$Precursors)
+b <- median(yy[yy$Organism == "Homo sapiens", ]$Precursors)
 c <- msfraggerdiadda_lib_precursors[msfraggerdiadda_lib_precursors$Organism == "Escherichia coli (strain K12)", ]$Precursors
-d <- msfraggerdiadda_lib_precursors[msfraggerdiadda_lib_precursors$Organism == "Homo sapiens (Human)", ]$Precursors
+d <- msfraggerdiadda_lib_precursors[msfraggerdiadda_lib_precursors$Organism == "Homo sapiens", ]$Precursors
 sprintf("%s, %d, %d, %.3f, %.3f", tool, a, b, a * 100 / b, a * (d - b) * 100 / (b * c))
