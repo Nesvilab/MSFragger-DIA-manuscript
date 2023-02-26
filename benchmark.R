@@ -51,6 +51,7 @@ msfraggerdiadda_lib_proteins <- lib2 %>%
 lib1 <- read_tsv("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\results\\benchmark\\diann\\diann-output-lib.tsv", col_select = c(ProteinGroup, PGQValue, ModifiedPeptide, PrecursorCharge))
 lib2 <- lib1 %>%
   filter(PGQValue < 0.01) %>%
+  select(-c(PGQValue)) %>%
   unique() %>%
   mutate(PrecursorId = paste0(ModifiedPeptide, PrecursorCharge)) %>%
   separate(col = ProteinGroup, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
