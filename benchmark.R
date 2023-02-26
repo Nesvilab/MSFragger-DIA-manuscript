@@ -26,7 +26,7 @@ lib1 <- read_tsv("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\results\\
 lib2 <- lib1 %>%
   unique() %>%
   mutate(PrecursorId = paste0(ModifiedPeptideSequence, PrecursorCharge)) %>%
-  separate(col = ProteinId, into = "Entry", sep = ";") %>%
+  separate(col = ProteinId, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation)
 msfraggerdia_lib_precursors <- lib2 %>%
   group_by(Organism) %>%
@@ -39,7 +39,7 @@ lib1 <- read_tsv("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\results\\
 lib2 <- lib1 %>%
   unique() %>%
   mutate(PrecursorId = paste0(ModifiedPeptideSequence, PrecursorCharge)) %>%
-  separate(col = ProteinId, into = "Entry", sep = ";") %>%
+  separate(col = ProteinId, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation)
 msfraggerdiadda_lib_precursors <- lib2 %>%
   group_by(Organism) %>%
@@ -53,7 +53,7 @@ lib2 <- lib1 %>%
   filter(PGQValue < 0.01) %>%
   unique() %>%
   mutate(PrecursorId = paste0(ModifiedPeptide, PrecursorCharge)) %>%
-  separate(col = ProteinGroup, into = "Entry", sep = ";") %>%
+  separate(col = ProteinGroup, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation)
 diann_lib_precursors <- lib2 %>%
   group_by(Organism) %>%
@@ -85,41 +85,40 @@ conditions_unique[grepl("1-25", conditions_unique$Run), grepl("Condition", colna
 #### precursor level ####
 # concentrate on relevant columns:
 msfraggerdia <- msfraggerdia %>%
-  separate(col = Protein.Group, into = "Entry", sep = ";") %>%
+  separate(col = Protein.Group, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation) %>%
   inner_join(conditions_unique)
 
 msfraggerdia_experimental_spectra <- msfraggerdia_experimental_spectra %>%
-  separate(col = Protein.Group, into = "Entry", sep = ";") %>%
+  separate(col = Protein.Group, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation) %>%
   inner_join(conditions_unique)
 
 msfraggerdia_hybrid <- msfraggerdia_hybrid %>%
-  separate(col = Protein.Group, into = "Entry", sep = ";") %>%
+  separate(col = Protein.Group, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation) %>%
   inner_join(conditions_unique)
 
 msfraggerdia_hybrid_experimental_spectra <- msfraggerdia_hybrid_experimental_spectra %>%
-  separate(col = Protein.Group, into = "Entry", sep = ";") %>%
+  separate(col = Protein.Group, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation) %>%
   inner_join(conditions_unique)
 
 diann <- diann %>%
-  separate(col = Protein.Group, into = "Entry", sep = ";") %>%
+  separate(col = Protein.Group, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation) %>%
   inner_join(conditions_unique)
 
 Spectronaut_qVal <- Spectronaut_qVal  %>%
   rename(PG.QValue.Run_Wise = "PG.QValue (Run-Wise)", Precursor.Quantity = "EG.TotalQuantity (Settings)", Run = R.FileName) %>%
   mutate(Precursor.Id = paste0(EG.ModifiedSequence, FG.Charge)) %>%
-  separate(col = PG.ProteinAccessions, into = "Entry", sep = ";") %>%
+  separate(col = PG.ProteinAccessions, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation) %>%
   inner_join(conditions_unique)
 
 
 # concentrate on relevant columns:
 prec_msfraggerdia <- msfraggerdia %>%
-  # filter(is.finite(Proteotypic)) %>%
   filter(Q.Value < 0.01) %>%
   filter(Global.Q.Value < 0.01) %>%
   filter(PG.Q.Value < 0.01) %>%
@@ -127,7 +126,6 @@ prec_msfraggerdia <- msfraggerdia %>%
   unique()
 
 prec_msfraggerdia_experimental_spectra <- msfraggerdia_experimental_spectra %>%
-  # filter(is.finite(Proteotypic)) %>%
   filter(Q.Value < 0.01) %>%
   filter(Global.Q.Value < 0.01) %>%
   filter(PG.Q.Value < 0.01) %>%
@@ -135,7 +133,6 @@ prec_msfraggerdia_experimental_spectra <- msfraggerdia_experimental_spectra %>%
   unique()
 
 prec_msfraggerdia_hybrid <- msfraggerdia_hybrid %>%
-  # filter(is.finite(Proteotypic)) %>%
   filter(Q.Value < 0.01) %>%
   filter(Global.Q.Value < 0.01) %>%
   filter(PG.Q.Value < 0.01) %>%
@@ -143,7 +140,6 @@ prec_msfraggerdia_hybrid <- msfraggerdia_hybrid %>%
   unique()
 
 prec_msfraggerdia_hybrid_experimental_spectra <- msfraggerdia_hybrid_experimental_spectra %>%
-  # filter(is.finite(Proteotypic)) %>%
   filter(Q.Value < 0.01) %>%
   filter(Global.Q.Value < 0.01) %>%
   filter(PG.Q.Value < 0.01) %>%
@@ -151,7 +147,6 @@ prec_msfraggerdia_hybrid_experimental_spectra <- msfraggerdia_hybrid_experimenta
   unique()
 
 prec_diann <- diann %>%
-  # filter(is.finite(Proteotypic)) %>%
   filter(Q.Value < 0.01) %>%
   filter(Global.Q.Value < 0.01) %>%
   filter(PG.Q.Value < 0.01) %>%
@@ -159,7 +154,6 @@ prec_diann <- diann %>%
   unique()
 
 prec_Spectronaut_DirectDIA_qVal <- Spectronaut_qVal  %>%
-  # filter(PEP.IsProteotypic == TRUE) %>%
   filter(PG.Qvalue < 0.01) %>%
   filter(PG.QValue.Run_Wise < 0.01) %>%
   filter(EG.Qvalue < 0.01) %>%
