@@ -89,8 +89,8 @@ for (path in pathes) {
                         intensity_col_sep = NULL,
                         intensity_col_id = NULL,
                         na_string = "0")
-        df_norm <- fast_preprocess(df$quant_table, median_normalization = FALSE, log2_intensity_cutoff = 0, pdf_out = NULL)
-        df_maxlfq <- fast_MaxLFQ(df_norm, row_names = df$protein[, 1], col_names = df$sample)
+        df_norm <- fast_preprocess(df$quant_table, median_normalization = FALSE, log2_intensity_cutoff = 0, pdf_out = NULL) # Do not enable median normalization because the tools have their own normalization algorithm.
+        df_maxlfq <- fast_MaxLFQ(df_norm, row_names = df$protein[, 1], col_names = df$sample) # MaxLFQ requires a precursor having non-zero intensities in at least two runs, which makes the "quantified" entries slightly fewer than those from the DIA-NN main report.
         maxlfq <- df_maxlfq$estimate
         maxlfq[maxlfq <= 0] <- NA
         write.table(2^maxlfq, out_path, quote = FALSE, sep = "\t", col.names = NA)
@@ -117,8 +117,8 @@ for (path in pathes) {
                         intensity_col_sep = NULL,
                         intensity_col_id = NULL,
                         na_string = "0")
-        df_norm <- fast_preprocess(df$quant_table, median_normalization = FALSE, pdf_out = NULL)
-        df_maxlfq <- fast_MaxLFQ(df_norm, row_names = df$protein[, 1], col_names = df$sample)
+        df_norm <- fast_preprocess(df$quant_table, median_normalization = FALSE, pdf_out = NULL) # Do not enable median normalization because the tools have their own normalization algorithm.
+        df_maxlfq <- fast_MaxLFQ(df_norm, row_names = df$protein[, 1], col_names = df$sample) # MaxLFQ requires a precursor having non-zero intensities in at least two runs, which makes the "quantified" entries slightly fewer than those from the DIA-NN main report.
         maxlfq <- df_maxlfq$estimate
         maxlfq[maxlfq <= 0] <- NA
         write.table(2^maxlfq, out_path, quote = FALSE, sep = "\t", col.names = NA)
@@ -144,8 +144,8 @@ for (path in pathes) {
                         intensity_col_sep = NULL,
                         intensity_col_id = NULL,
                         na_string = "0")
-        df_norm <- fast_preprocess(df$quant_table, median_normalization = FALSE, pdf_out = NULL)
-        df_maxlfq <- fast_MaxLFQ(df_norm, row_names = df$protein[, 1], col_names = df$sample)
+        df_norm <- fast_preprocess(df$quant_table, median_normalization = FALSE, pdf_out = NULL) # Do not enable median normalization because the tools have their own normalization algorithm.
+        df_maxlfq <- fast_MaxLFQ(df_norm, row_names = df$protein[, 1], col_names = df$sample) # MaxLFQ requires a precursor having non-zero intensities in at least two runs, which makes the "quantified" entries slightly fewer than those from the DIA-NN main report.
         maxlfq <- df_maxlfq$estimate
         maxlfq[maxlfq <= 0] <- NA
         write.table(2^maxlfq, out_path, quote = FALSE, sep = "\t", col.names = NA)
