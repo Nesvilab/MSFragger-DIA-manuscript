@@ -21,7 +21,7 @@ library(iq)
 library(stringr)
 library(matrixStats)
 
-pathes <- list.files("Z:\\yufe\\results\\msfragger_dia_paper\\", pattern = "(report\\.tsv)|(diann-output\\.tsv)", full.names = TRUE, recursive = TRUE)
+pathes <- list.files("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\results\\", pattern = "(report\\.tsv)|(diann-output\\.tsv)", full.names = TRUE, recursive = TRUE)
 
 globalPrecursorFDR <- 0.01
 globalProteinFDR <- 0.01
@@ -33,11 +33,6 @@ for (path in pathes) {
     if (str_detect(path, "runtime")) {
       next
     }
-
-    globalPrecursorFDR <- 0.01
-    globalProteinFDR <- 0.01
-    runSpecificPrecursorFDR <- 0.01
-    runSpecificProteinFDR <- 0.01
 
     out_path <- str_c(dirname(path), "/precursor_maxlfq.tsv")
     if (file.exists(out_path) == FALSE) {
@@ -123,12 +118,13 @@ for (path in pathes) {
       write.table(2^maxlfq, out_path, quote = FALSE, sep = "\t", col.names = NA)
     }
 
-    out_path_1 <- str_c(dirname(path), "/gene_maxlfq.tsv")
-    if (file.exists(out_path_1) == FALSE) {
-      print(out_path_1)
+    out_path <- str_c(dirname(path), "/gene_maxlfq.tsv")
+    if (file.exists(out_path) == FALSE) {
+      print(out_path)
       print(str_c("global precursor FDR = ", globalPrecursorFDR))
       print(str_c("global protein FDR = ", globalProteinFDR))
       print(str_c("run specific precursor FDR = ", runSpecificPrecursorFDR))
+      print(str_c("run specific protein FDR = ", runSpecificProteinFDR))
 
       df <- fast_read(path,
                       sample_id = "Run",

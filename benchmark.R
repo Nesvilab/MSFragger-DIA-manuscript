@@ -14,8 +14,7 @@ library(data.table)
 
 theme_set(theme_classic())
 
-setwd("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\code\\MSFragger-DIA-manuscript\\")
-
+setwd("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\results\\benchmark\\")
 
 # load annotation data
 annotation <- read_tsv("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\code\\MSFragger-DIA-manuscript\\uniprot.tab", col_select = c("Entry", "Organism"))
@@ -23,10 +22,10 @@ annotation <- read_tsv("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\cod
 human_ecoli_overlap_peptide <- read.delim("human_ecoli_overlap_peptides.txt", header = FALSE, sep = "\t")
 
 #### list library stats ####
-lib1 <- read_tsv("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\results\\benchmark\\msfraggerdia\\library.tsv", col_select = c(ProteinId, PeptideSequence, ModifiedPeptideSequence, PrecursorCharge))
+lib1 <- read_tsv("msfraggerdia\\library.tsv", col_select = c(ProteinId, PeptideSequence, ModifiedPeptideSequence, PrecursorCharge))
 lib2 <- lib1 %>%
   unique() %>%
-  filter(!PeptideSequence %in% human_ecoli_overlap_peptide) %>%
+  filter(!(PeptideSequence %in% human_ecoli_overlap_peptide)) %>%
   mutate(PrecursorId = paste0(ModifiedPeptideSequence, PrecursorCharge)) %>%
   separate(col = ProteinId, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation)
@@ -36,11 +35,13 @@ msfraggerdia_lib_precursors <- lib2 %>%
 msfraggerdia_lib_proteins <- lib2 %>%
   group_by(Organism) %>%
   summarise(Proteins = n_distinct(Entry))
+print(msfraggerdia_lib_precursors)
+print(msfraggerdia_lib_proteins)
 
-lib1 <- read_tsv("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\results\\benchmark\\msfraggerdiadda\\library.tsv", col_select = c(ProteinId, PeptideSequence, ModifiedPeptideSequence, PrecursorCharge))
+lib1 <- read_tsv("msfraggerdiadda\\library.tsv", col_select = c(ProteinId, PeptideSequence, ModifiedPeptideSequence, PrecursorCharge))
 lib2 <- lib1 %>%
   unique() %>%
-  filter(!PeptideSequence %in% human_ecoli_overlap_peptide) %>%
+  filter(!(PeptideSequence %in% human_ecoli_overlap_peptide)) %>%
   mutate(PrecursorId = paste0(ModifiedPeptideSequence, PrecursorCharge)) %>%
   separate(col = ProteinId, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation)
@@ -50,13 +51,15 @@ msfraggerdiadda_lib_precursors <- lib2 %>%
 msfraggerdiadda_lib_proteins <- lib2 %>%
   group_by(Organism) %>%
   summarise(Proteins = n_distinct(Entry))
+print(msfraggerdiadda_lib_precursors)
+print(msfraggerdiadda_lib_proteins)
 
-lib1 <- read_tsv("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\results\\benchmark\\diann\\diann-output-lib.tsv", col_select = c(ProteinGroup, PeptideSequence, PGQValue, ModifiedPeptide, PrecursorCharge))
+lib1 <- read_tsv("diann\\diann-output-lib.tsv", col_select = c(ProteinGroup, PeptideSequence, PGQValue, ModifiedPeptide, PrecursorCharge))
 lib2 <- lib1 %>%
   filter(PGQValue < 0.01) %>%
   select(-c(PGQValue)) %>%
   unique() %>%
-  filter(!PeptideSequence %in% human_ecoli_overlap_peptide) %>%
+  filter(!(PeptideSequence %in% human_ecoli_overlap_peptide)) %>%
   mutate(PrecursorId = paste0(ModifiedPeptide, PrecursorCharge)) %>%
   separate(col = ProteinGroup, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation)
@@ -66,17 +69,20 @@ diann_lib_precursors <- lib2 %>%
 diann_lib_proteins <- lib2 %>%
   group_by(Organism) %>%
   summarise(Proteins = n_distinct(Entry))
+print(diann_lib_precursors)
+print(diann_lib_proteins)
 
 
 #### data formating etc ####
 
 # load data
-msfraggerdia <- read_tsv("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\results\\benchmark\\msfraggerdia\\diann-output.tsv", na = c("NA", "0", ""), col_select =  c(Protein.Group, Proteotypic, Q.Value, Global.Q.Value, PG.Q.Value, Global.PG.Q.Value, Run, Precursor.Id, Precursor.Quantity, Lib.Q.Value, Lib.PG.Q.Value, Stripped.Sequence))
-msfraggerdia_experimental_spectra <- read_tsv("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\results\\benchmark\\msfraggerdia_experimental_spectra\\diann-output.tsv", na = c("NA", "0", ""), col_select =  c(Protein.Group, Proteotypic, Q.Value, Global.Q.Value, PG.Q.Value, Global.PG.Q.Value, Run, Precursor.Id, Precursor.Quantity, Lib.Q.Value, Lib.PG.Q.Value, Stripped.Sequence))
-msfraggerdia_hybrid <- read_tsv("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\results\\benchmark\\msfraggerdiadda\\diann-output.tsv", na = c("NA", "0", ""), col_select =  c(Protein.Group, Proteotypic, Q.Value, Global.Q.Value, PG.Q.Value, Global.PG.Q.Value, Run, Precursor.Id, Precursor.Quantity, Lib.Q.Value, Lib.PG.Q.Value, Stripped.Sequence))
-msfraggerdia_hybrid_experimental_spectra <- read_tsv("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\results\\benchmark\\msfraggerdiadda_experimental_spectra\\diann-output.tsv", na = c("NA", "0", ""), col_select =  c(Protein.Group, Proteotypic, Q.Value, Global.Q.Value, PG.Q.Value, Global.PG.Q.Value, Run, Precursor.Id, Precursor.Quantity, Lib.Q.Value, Lib.PG.Q.Value, Stripped.Sequence))
-diann <- read_tsv("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\results\\benchmark\\diann\\diann-output.tsv", na = c("NA", "0", ""), col_select =  c(Protein.Group, Proteotypic, Q.Value, Global.Q.Value, PG.Q.Value, Global.PG.Q.Value, Run, Precursor.Id, Precursor.Quantity, Lib.Q.Value, Lib.PG.Q.Value, Stripped.Sequence))
-Spectronaut_qVal <- read_tsv("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\results\\benchmark\\spectronaut\\Spectronaut_DirectDIAV15_qVal.xls", na = c("NA", "0", ""), col_select = c(R.FileName, PEP.IsProteotypic, PG.ProteinAccessions, EG.Qvalue, EG.ModifiedSequence, FG.Charge, PG.Qvalue, "PG.QValue (Run-Wise)", "EG.TotalQuantity (Settings)", PEP.StrippedSequence))
+msfraggerdia <- read_tsv("msfraggerdia\\diann-output.tsv", na = c("0", ""), col_select =  c(Protein.Group, Proteotypic, Q.Value, Global.Q.Value, PG.Q.Value, Global.PG.Q.Value, Run, Precursor.Id, Precursor.Quantity, Lib.Q.Value, Lib.PG.Q.Value, Stripped.Sequence))
+msfraggerdia_experimental_spectra <- read_tsv("msfraggerdia_experimental_spectra\\diann-output.tsv", na = c("0", ""), col_select =  c(Protein.Group, Proteotypic, Q.Value, Global.Q.Value, PG.Q.Value, Global.PG.Q.Value, Run, Precursor.Id, Precursor.Quantity, Lib.Q.Value, Lib.PG.Q.Value, Stripped.Sequence))
+msfraggerdia_hybrid <- read_tsv("msfraggerdiadda\\diann-output.tsv", na = c("0", ""), col_select =  c(Protein.Group, Proteotypic, Q.Value, Global.Q.Value, PG.Q.Value, Global.PG.Q.Value, Run, Precursor.Id, Precursor.Quantity, Lib.Q.Value, Lib.PG.Q.Value, Stripped.Sequence))
+msfraggerdia_hybrid_experimental_spectra <- read_tsv("msfraggerdiadda_experimental_spectra\\diann-output.tsv", na = c("0", ""), col_select =  c(Protein.Group, Proteotypic, Q.Value, Global.Q.Value, PG.Q.Value, Global.PG.Q.Value, Run, Precursor.Id, Precursor.Quantity, Lib.Q.Value, Lib.PG.Q.Value, Stripped.Sequence))
+diann <- read_tsv("diann\\diann-output.tsv", na = c("0", ""), col_select =  c(Protein.Group, Proteotypic, Q.Value, Global.Q.Value, PG.Q.Value, Global.PG.Q.Value, Run, Precursor.Id, Precursor.Quantity, Lib.Q.Value, Lib.PG.Q.Value, Stripped.Sequence))
+spectronaut_14 <- read_tsv("spectronaut\\14\\20230227_181426_directDIA_LymphEcoli_Report.tsv", na = c("NaN", "NA", ""), col_select = c(R.FileName, PG.ProteinAccessions, EG.Qvalue, EG.ModifiedSequence, FG.Charge, PG.Qvalue, "PG.QValue (Run-Wise)", "EG.TotalQuantity (Settings)", PEP.StrippedSequence))
+spectronaut_17 <- read_tsv("spectronaut\\17\\20230227_180032_SN17_RealDilutionSeries_Report.tsv", na = c("NaN", "NA", ""), col_select = c(R.FileName, PG.ProteinAccessions, EG.Qvalue, EG.ModifiedSequence, FG.Charge, PG.Qvalue, "PG.QValue (Run-Wise)", "EG.TotalQuantity (Settings)", PEP.StrippedSequence))
 
 
 #condition annotation
@@ -90,37 +96,45 @@ conditions_unique[grepl("1-25", conditions_unique$Run), grepl("Condition", colna
 #### precursor level ####
 # concentrate on relevant columns:
 msfraggerdia <- msfraggerdia %>%
-  filter(!Stripped.Sequence %in% human_ecoli_overlap_peptide) %>%
+  filter(!(Stripped.Sequence %in% human_ecoli_overlap_peptide)) %>%
   separate(col = Protein.Group, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation) %>%
   inner_join(conditions_unique)
 
 msfraggerdia_experimental_spectra <- msfraggerdia_experimental_spectra %>%
-  filter(!Stripped.Sequence %in% human_ecoli_overlap_peptide) %>%
+  filter(!(Stripped.Sequence %in% human_ecoli_overlap_peptide)) %>%
   separate(col = Protein.Group, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation) %>%
   inner_join(conditions_unique)
 
 msfraggerdia_hybrid <- msfraggerdia_hybrid %>%
-  filter(!Stripped.Sequence %in% human_ecoli_overlap_peptide) %>%
+  filter(!(Stripped.Sequence %in% human_ecoli_overlap_peptide)) %>%
   separate(col = Protein.Group, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation) %>%
   inner_join(conditions_unique)
 
 msfraggerdia_hybrid_experimental_spectra <- msfraggerdia_hybrid_experimental_spectra %>%
-  filter(!Stripped.Sequence %in% human_ecoli_overlap_peptide) %>%
+  filter(!(Stripped.Sequence %in% human_ecoli_overlap_peptide)) %>%
   separate(col = Protein.Group, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation) %>%
   inner_join(conditions_unique)
 
 diann <- diann %>%
-  filter(!Stripped.Sequence %in% human_ecoli_overlap_peptide) %>%
+  filter(!(Stripped.Sequence %in% human_ecoli_overlap_peptide)) %>%
   separate(col = Protein.Group, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation) %>%
   inner_join(conditions_unique)
 
-Spectronaut_qVal <- Spectronaut_qVal  %>%
-  filter(!PEP.StrippedSequence %in% human_ecoli_overlap_peptide) %>%
+spectronaut_14 <- spectronaut_14  %>%
+  filter(!(PEP.StrippedSequence %in% human_ecoli_overlap_peptide)) %>%
+  rename(PG.QValue.Run_Wise = "PG.QValue (Run-Wise)", Precursor.Quantity = "EG.TotalQuantity (Settings)", Run = R.FileName) %>%
+  mutate(Precursor.Id = paste0(EG.ModifiedSequence, FG.Charge)) %>%
+  separate(col = PG.ProteinAccessions, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
+  inner_join(annotation) %>%
+  inner_join(conditions_unique)
+
+spectronaut_17 <- spectronaut_17  %>%
+  filter(!(PEP.StrippedSequence %in% human_ecoli_overlap_peptide)) %>%
   rename(PG.QValue.Run_Wise = "PG.QValue (Run-Wise)", Precursor.Quantity = "EG.TotalQuantity (Settings)", Run = R.FileName) %>%
   mutate(Precursor.Id = paste0(EG.ModifiedSequence, FG.Charge)) %>%
   separate(col = PG.ProteinAccessions, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
@@ -164,7 +178,13 @@ prec_diann <- diann %>%
   filter(Global.PG.Q.Value < 0.01) %>%
   unique()
 
-prec_Spectronaut_DirectDIA_qVal <- Spectronaut_qVal  %>%
+prec_spectronaut_14 <- spectronaut_14 %>%
+  filter(PG.Qvalue < 0.01) %>%
+  # filter(PG.QValue.Run_Wise < 0.01) %>%  # Spectronaut 14 does not have run-wise q-value
+  filter(EG.Qvalue < 0.01) %>%
+  unique()
+
+prec_spectronaut_17 <- spectronaut_17 %>%
   filter(PG.Qvalue < 0.01) %>%
   filter(PG.QValue.Run_Wise < 0.01) %>%
   filter(EG.Qvalue < 0.01) %>%
@@ -173,8 +193,9 @@ prec_Spectronaut_DirectDIA_qVal <- Spectronaut_qVal  %>%
 
 # one big list
 prec_list <- list()
-prec_list$Spectronaut <- prec_Spectronaut_DirectDIA_qVal
-prec_list$`DIA-NN` <- prec_diann
+prec_list$`Spectronaut 14` <- prec_spectronaut_14
+prec_list$`Spectronaut 17` <- prec_spectronaut_17
+prec_list$`DIA-NN lib-free` <- prec_diann
 prec_list$`FP-MSF` <- prec_msfraggerdia
 prec_list$`FP-MSF hybrid` <- prec_msfraggerdia_hybrid
 
@@ -194,98 +215,79 @@ prec_IDs <- prec_df %>%
 
 prec_IDs$Origin <- factor(prec_IDs$Origin)
 
-ggplot(prec_IDs, aes(x = Precursors , y = Origin, color = Condition))+
+ggplot(prec_IDs, aes(x = Precursors, y = Origin, color = Condition)) +
   geom_boxplot(size = 0.5) +
   facet_grid(~ Organism, scales = "free") +
   theme(text = element_text(size = 20), axis.title.y = element_blank()) +
-  scale_y_discrete(limits = c("FP-MSF hybrid", "FP-MSF", "DIA-NN", "Spectronaut"))
+  scale_y_discrete(limits = c("FP-MSF hybrid", "FP-MSF", "DIA-NN lib-free", "Spectronaut 17", "Spectronaut 14")) +
+  geom_vline(xintercept = 0, size=0.2, colour="red")
 
-ggsave("benchmark_precursors.pdf", width = 15, height = 6, units = "in")
-
-
-# # precursor variance per software solution separated by condition
-# prec_var <- prec_df %>%
-#   group_by(Origin, Condition, Entry, Organism) %>%
-#   summarise(Variance = sd(log2(Precursor.Quantity), na.rm = TRUE))
-#
-# ggplot(prec_var, aes(x = Variance , y = Origin, color = Condition))+
-#   geom_boxplot(size = 0.5) +
-#   facet_grid(~ Organism, scales = "free") +
-#   theme(text = element_text(size = 20), axis.title.y = element_blank())
-#
-# ggsave("lumph_variance.pdf", width = 15, height = 6, units = "in")
+ggsave("benchmark_boxplot_precursors.pdf", width = 15, height = 6, units = "in")
 
 
 ## print numbers
-
-# one big list
-prec_list <- list()
-prec_list$Spectronaut <- prec_Spectronaut_DirectDIA_qVal
-prec_list$`DIA-NN` <- prec_diann
-prec_list$`MSFragger` <- prec_msfraggerdia
-prec_list$`MSFragger experimental spectra` <- prec_msfraggerdia_experimental_spectra
-prec_list$`MSFragger hybrid` <- prec_msfraggerdia_hybrid
-prec_list$`MSFragger hybrid experimental spectra` <- prec_msfraggerdia_hybrid_experimental_spectra
-
-
-#combine to one dataframe
-prec_df <- bind_rows(prec_list, .id = "Origin") %>%
-  drop_na(Organism) %>%
-  drop_na(Condition)
-
-prec_df$Condition <- factor(prec_df$Condition)
-
-
-# peptide IDs per software solution separated by conditions
-prec_IDs <- prec_df %>%
-  group_by(Origin, Condition, Run, Organism) %>%
+tool <- "Spectronaut 14"
+yy <- prec_spectronaut_14[prec_spectronaut_14$Condition == "Lymphnode", ] %>%
+  group_by(Organism) %>%
   summarise(Precursors = n_distinct(Precursor.Id))
+a <- yy[yy$Organism == "Escherichia coli (strain K12)", ]$Precursors
+b <- yy[yy$Organism == "Homo sapiens", ]$Precursors
+sprintf("%s, %.1f, %.1f, %.3f, NA", tool, a, b, a * 100 / b)
 
-prec_IDs$Origin <- factor(prec_IDs$Origin)
+tool <- "Spectronaut 17"
+yy <- prec_spectronaut_17[prec_spectronaut_17$Condition == "Lymphnode", ] %>%
+  group_by(Organism) %>%
+  summarise(Precursors = n_distinct(Precursor.Id))
+a <- yy[yy$Organism == "Escherichia coli (strain K12)", ]$Precursors
+b <- yy[yy$Organism == "Homo sapiens", ]$Precursors
+sprintf("%s, %.1f, %.1f, %.3f, NA", tool, a, b, a * 100 / b)
 
-
-tool <- "Spectronaut"
-yy <- prec_IDs[prec_IDs$Condition == "Lymphnode" & prec_IDs$Origin == tool, ]
-a <- median(yy[yy$Organism == "Escherichia coli (strain K12)", ]$Precursors)
-b <- median(yy[yy$Organism == "Homo sapiens", ]$Precursors)
-sprintf("%s, %d, %d, %.3f, NA", tool, a, b, a * 100 / b)
-
-tool <- "DIA-NN"
-yy <- prec_IDs[prec_IDs$Condition == "Lymphnode" & prec_IDs$Origin == tool, ]
-a <- median(yy[yy$Organism == "Escherichia coli (strain K12)", ]$Precursors)
-b <- median(yy[yy$Organism == "Homo sapiens", ]$Precursors)
+tool <- "DIA-NN lib-free"
+yy <- prec_diann[prec_diann$Condition == "Lymphnode", ] %>%
+  group_by(Organism) %>%
+  summarise(Precursors = n_distinct(Precursor.Id))
+a <- yy[yy$Organism == "Escherichia coli (strain K12)", ]$Precursors
+b <- yy[yy$Organism == "Homo sapiens", ]$Precursors
 c <- diann_lib_precursors[diann_lib_precursors$Organism == "Escherichia coli (strain K12)", ]$Precursors
 d <- diann_lib_precursors[diann_lib_precursors$Organism == "Homo sapiens", ]$Precursors
-sprintf("%s, %d, %d, %.3f, %.3f", tool, a, b, a * 100 / b, a * (d - b) * 100 / (b * c))
+sprintf("%s, %.1f, %.1f, %.3f, %.3f", tool, a, b, a * 100 / b, a * (d - b) * 100 / (b * c))
 
-tool <- "MSFragger"
-yy <- prec_IDs[prec_IDs$Condition == "Lymphnode" & prec_IDs$Origin == tool, ]
-a <- median(yy[yy$Organism == "Escherichia coli (strain K12)", ]$Precursors)
-b <- median(yy[yy$Organism == "Homo sapiens", ]$Precursors)
+tool <- "FP-MSF"
+yy <- prec_msfraggerdia[prec_msfraggerdia$Condition == "Lymphnode", ] %>%
+  group_by(Organism) %>%
+  summarise(Precursors = n_distinct(Precursor.Id))
+a <- yy[yy$Organism == "Escherichia coli (strain K12)", ]$Precursors
+b <- yy[yy$Organism == "Homo sapiens", ]$Precursors
 c <- msfraggerdia_lib_precursors[msfraggerdia_lib_precursors$Organism == "Escherichia coli (strain K12)", ]$Precursors
 d <- msfraggerdia_lib_precursors[msfraggerdia_lib_precursors$Organism == "Homo sapiens", ]$Precursors
-sprintf("%s, %d, %d, %.3f, %.3f", tool, a, b, a * 100 / b, a * (d - b) * 100 / (b * c))
+sprintf("%s, %.1f, %.1f, %.3f, %.3f", tool, a, b, a * 100 / b, a * (d - b) * 100 / (b * c))
 
-tool <- "MSFragger experimental spectra"
-yy <- prec_IDs[prec_IDs$Condition == "Lymphnode" & prec_IDs$Origin == tool, ]
-a <- median(yy[yy$Organism == "Escherichia coli (strain K12)", ]$Precursors)
-b <- median(yy[yy$Organism == "Homo sapiens", ]$Precursors)
+tool <- "FP-MSF experimental spectra"
+yy <- prec_msfraggerdia_experimental_spectra[prec_msfraggerdia_experimental_spectra$Condition == "Lymphnode", ] %>%
+  group_by(Organism) %>%
+  summarise(Precursors = n_distinct(Precursor.Id))
+a <- yy[yy$Organism == "Escherichia coli (strain K12)", ]$Precursors
+b <- yy[yy$Organism == "Homo sapiens", ]$Precursors
 c <- msfraggerdia_lib_precursors[msfraggerdia_lib_precursors$Organism == "Escherichia coli (strain K12)", ]$Precursors
 d <- msfraggerdia_lib_precursors[msfraggerdia_lib_precursors$Organism == "Homo sapiens", ]$Precursors
-sprintf("%s, %d, %d, %.3f, %.3f", tool, a, b, a * 100 / b, a * (d - b) * 100 / (b * c))
+sprintf("%s, %.1f, %.1f, %.3f, %.3f", tool, a, b, a * 100 / b, a * (d - b) * 100 / (b * c))
 
-tool <- "MSFragger hybrid"
-yy <- prec_IDs[prec_IDs$Condition == "Lymphnode" & prec_IDs$Origin == tool, ]
-a <- median(yy[yy$Organism == "Escherichia coli (strain K12)", ]$Precursors)
-b <- median(yy[yy$Organism == "Homo sapiens", ]$Precursors)
+tool <- "FP-MSF hybrid"
+yy <- prec_msfraggerdia_hybrid[prec_msfraggerdia_hybrid$Condition == "Lymphnode", ] %>%
+  group_by(Organism) %>%
+  summarise(Precursors = n_distinct(Precursor.Id))
+a <- yy[yy$Organism == "Escherichia coli (strain K12)", ]$Precursors
+b <- yy[yy$Organism == "Homo sapiens", ]$Precursors
 c <- msfraggerdiadda_lib_precursors[msfraggerdiadda_lib_precursors$Organism == "Escherichia coli (strain K12)", ]$Precursors
 d <- msfraggerdiadda_lib_precursors[msfraggerdiadda_lib_precursors$Organism == "Homo sapiens", ]$Precursors
-sprintf("%s, %d, %d, %.3f, %.3f", tool, a, b, a * 100 / b, a * (d - b) * 100 / (b * c))
+sprintf("%s, %.1f, %.1f, %.3f, %.3f", tool, a, b, a * 100 / b, a * (d - b) * 100 / (b * c))
 
-tool <- "MSFragger hybrid experimental spectra"
-yy <- prec_IDs[prec_IDs$Condition == "Lymphnode" & prec_IDs$Origin == tool, ]
-a <- median(yy[yy$Organism == "Escherichia coli (strain K12)", ]$Precursors)
-b <- median(yy[yy$Organism == "Homo sapiens", ]$Precursors)
+tool <- "FP-MSF hybrid experimental spectra"
+yy <- prec_msfraggerdia_hybrid_experimental_spectra[prec_msfraggerdia_hybrid_experimental_spectra$Condition == "Lymphnode", ] %>%
+  group_by(Organism) %>%
+  summarise(Precursors = n_distinct(Precursor.Id))
+a <- yy[yy$Organism == "Escherichia coli (strain K12)", ]$Precursors
+b <- yy[yy$Organism == "Homo sapiens", ]$Precursors
 c <- msfraggerdiadda_lib_precursors[msfraggerdiadda_lib_precursors$Organism == "Escherichia coli (strain K12)", ]$Precursors
 d <- msfraggerdiadda_lib_precursors[msfraggerdiadda_lib_precursors$Organism == "Homo sapiens", ]$Precursors
-sprintf("%s, %d, %d, %.3f, %.3f", tool, a, b, a * 100 / b, a * (d - b) * 100 / (b * c))
+sprintf("%s, %.1f, %.1f, %.3f, %.3f", tool, a, b, a * 100 / b, a * (d - b) * 100 / (b * c))

@@ -19,7 +19,7 @@ import os
 
 from pyopenms import ProteaseDigestion, AASequence
 
-os.chdir(r"Z:\yufe\results\msfragger_dia_paper\benchmark")
+os.chdir(r"G:\Dropbox\papers_Fengchao\msfragger_dia\script\results\benchmark")
 
 digestion = ProteaseDigestion()
 digestion.setEnzyme("Trypsin/P")

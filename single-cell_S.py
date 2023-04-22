@@ -18,6 +18,7 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import os
 
 sns.set(font="Arial")
 sns.set_theme(style="ticks")
@@ -33,8 +34,10 @@ palette_dict = {
     "msfragger hybrid": sns.color_palette()[1]
 }
 
-maxdia_path_list = [r"G:\Dropbox\papers_Fengchao\msfragger_dia\script\results\single-cell_1cell_10cells12xLib\maxdia\combined\txt\proteinGroups.txt",
-                    r"G:\Dropbox\papers_Fengchao\msfragger_dia\script\results\single-cell_100cells_1ug8xLib\maxdia\combined\txt\proteinGroups.txt"]
+os.chdir(r"G:\Dropbox\papers_Fengchao\msfragger_dia\script\results")
+
+maxdia_path_list = [r"single-cell_1cell_10cells12xLib\maxdia\combined\txt\proteinGroups.txt",
+                    r"single-cell_100cells_1ug8xLib\maxdia\combined\txt\proteinGroups.txt"]
 
 experiment_list = ["1 cell", "117 cells"]
 msfraggerdia_cols = [["Unnamed: 0", "20201112_MEC1-MF-1cell-Eclipse-DIA-01", "20201112_MEC1-MF-1cell-Eclipse-DIA-02", "20201112_MEC1-MF-1cell-Eclipse-DIA-03"],

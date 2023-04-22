@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+import os
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -23,6 +24,7 @@ import matplotlib.pyplot as plt
 sns.set(font="Arial")
 sns.set_theme(style="ticks")
 
+os.chdir(r"G:\Dropbox\papers_Fengchao\msfragger_dia\script\results")
 
 # ccrcc 20 desktop
 diaumpire = [254, 17, 23, 10]  # dia-umpire, msfragger, msbooster+percolator+filtering+easypqp, dia-nn
@@ -30,7 +32,7 @@ diann = [30, 332-30]  # prediction, others
 maxdia = [1255]
 msfraggerdia = [65, 50, 10]  # msfragger, msbooster+percolator+filtering+easypqp, dia-nn
 
-xx = pd.DataFrame({"tool":  ["FP-DIAU", "DIA-NN", "MaxDIA", "FP-MSF"],
+xx = pd.DataFrame({"tool":  ["FP-DIAU", "DIA-NN lib-free", "MaxDIA", "FP-MSF"],
                    "spectral library prediction": [0, diann[0], 0, 0],
                    "identification and quantification": [0, diann[1], 0, 0],
                    "pseudo-MS/MS generation": [diaumpire[0], 0, 0, 0],
@@ -52,7 +54,7 @@ diann = [10, 194]  # prediction, others
 maxdia = [550]
 msfraggerdia = [43, 47, 18]  # msfragger, msbooster+percolator+filtering+easypqp, dia-nn
 
-xx = pd.DataFrame({"tool":  ["FP-DIAU", "DIA-NN", "MaxDIA", "FP-MSF"],
+xx = pd.DataFrame({"tool":  ["FP-DIAU", "DIA-NN lib-free", "MaxDIA", "FP-MSF"],
                    "spectral library prediction": [0, diann[0], 0, 0],
                    "identification and quantification": [0, diann[1], 0, 0],
                    "pseudo-MS/MS generation": [diaumpire[0], 0, 0, 0],
@@ -73,7 +75,7 @@ diaumpire = [132, 13, 13, 5]  # dia-umpire, msfragger, msbooster+percolator+filt
 diann = [1213, 2558-1213]  # prediction, others
 msfraggerdia = [141, 33, 5]  # msfragger, msbooster+percolator+filtering+easypqp, dia-nn
 
-xx = pd.DataFrame({"tool":  ["FP-DIAU", "DIA-NN", "FP-MSF"],
+xx = pd.DataFrame({"tool":  ["FP-DIAU", "DIA-NN lib-free", "FP-MSF"],
                    "spectral library prediction": [0, diann[0], 0],
                    "identification and quantification": [0, diann[1], 0],
                    "pseudo-MS/MS generation": [diaumpire[0], 0, 0],
@@ -92,7 +94,7 @@ diaumpire = [157, 11, 14, 11]  # dia-umpire, msfragger, msbooster+percolator+fil
 diann = [109, 1143-109]  # prediction, others
 msfraggerdia = [144, 36, 13]  # msfragger, msbooster+percolator+filtering+easypqp, dia-nn
 
-xx = pd.DataFrame({"tool":  ["FP-DIAU", "DIA-NN", "FP-MSF"],
+xx = pd.DataFrame({"tool":  ["FP-DIAU", "DIA-NN lib-free", "FP-MSF"],
                    "spectral library prediction": [0, diann[0], 0],
                    "identification and quantification": [0, diann[1], 0],
                    "pseudo-MS/MS generation": [diaumpire[0], 0, 0],
