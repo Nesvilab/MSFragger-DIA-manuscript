@@ -84,6 +84,10 @@ for (i in seq(1, length(inputList))) {
   colnames(diaInput)[wt] <- "C3L-00360-N"
   colnames(diaInput)[wn] <- "C3L-00360-T"
 
+  # There are row with empty gene names. They are very rare but crash OmicsEV. Remove them.
+  empty_rows <- diaInput[, 1] == ""
+  diaInput <- diaInput[!empty_rows, ]
+
   write.table(diaInput, outputList[i], quote = F, row.names = F, sep = "\t")
 }
 
@@ -97,3 +101,4 @@ run_omics_evaluation(data_dir = "datasets2/",
                      class_for_fun = "Tumor",
                      class_for_ml = NULL,
                      use_existing_data=TRUE)
+
