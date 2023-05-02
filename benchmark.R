@@ -25,7 +25,7 @@ human_ecoli_overlap_peptide <- read.delim("human_ecoli_overlap_peptides.txt", he
 lib1 <- read_tsv("msfraggerdia\\library.tsv", col_select = c(ProteinId, PeptideSequence, ModifiedPeptideSequence, PrecursorCharge))
 lib2 <- lib1 %>%
   unique() %>%
-  filter(!(PeptideSequence %in% human_ecoli_overlap_peptide)) %>%
+  filter(!(PeptideSequence %in% human_ecoli_overlap_peptide$V1)) %>%
   mutate(PrecursorId = paste0(ModifiedPeptideSequence, PrecursorCharge)) %>%
   separate(col = ProteinId, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation)
@@ -41,7 +41,7 @@ print(msfraggerdia_lib_proteins)
 lib1 <- read_tsv("msfraggerdiadda\\library.tsv", col_select = c(ProteinId, PeptideSequence, ModifiedPeptideSequence, PrecursorCharge))
 lib2 <- lib1 %>%
   unique() %>%
-  filter(!(PeptideSequence %in% human_ecoli_overlap_peptide)) %>%
+  filter(!(PeptideSequence %in% human_ecoli_overlap_peptide$V1)) %>%
   mutate(PrecursorId = paste0(ModifiedPeptideSequence, PrecursorCharge)) %>%
   separate(col = ProteinId, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation)
@@ -59,7 +59,7 @@ lib2 <- lib1 %>%
   filter(PGQValue < 0.01) %>%
   select(-c(PGQValue)) %>%
   unique() %>%
-  filter(!(PeptideSequence %in% human_ecoli_overlap_peptide)) %>%
+  filter(!(PeptideSequence %in% human_ecoli_overlap_peptide$V1)) %>%
   mutate(PrecursorId = paste0(ModifiedPeptide, PrecursorCharge)) %>%
   separate(col = ProteinGroup, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation)
@@ -96,37 +96,37 @@ conditions_unique[grepl("1-25", conditions_unique$Run), grepl("Condition", colna
 #### precursor level ####
 # concentrate on relevant columns:
 msfraggerdia <- msfraggerdia %>%
-  filter(!(Stripped.Sequence %in% human_ecoli_overlap_peptide)) %>%
+  filter(!(Stripped.Sequence %in% human_ecoli_overlap_peptide$V1)) %>%
   separate(col = Protein.Group, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation) %>%
   inner_join(conditions_unique)
 
 msfraggerdia_experimental_spectra <- msfraggerdia_experimental_spectra %>%
-  filter(!(Stripped.Sequence %in% human_ecoli_overlap_peptide)) %>%
+  filter(!(Stripped.Sequence %in% human_ecoli_overlap_peptide$V1)) %>%
   separate(col = Protein.Group, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation) %>%
   inner_join(conditions_unique)
 
 msfraggerdia_hybrid <- msfraggerdia_hybrid %>%
-  filter(!(Stripped.Sequence %in% human_ecoli_overlap_peptide)) %>%
+  filter(!(Stripped.Sequence %in% human_ecoli_overlap_peptide$V1)) %>%
   separate(col = Protein.Group, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation) %>%
   inner_join(conditions_unique)
 
 msfraggerdia_hybrid_experimental_spectra <- msfraggerdia_hybrid_experimental_spectra %>%
-  filter(!(Stripped.Sequence %in% human_ecoli_overlap_peptide)) %>%
+  filter(!(Stripped.Sequence %in% human_ecoli_overlap_peptide$V1)) %>%
   separate(col = Protein.Group, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation) %>%
   inner_join(conditions_unique)
 
 diann <- diann %>%
-  filter(!(Stripped.Sequence %in% human_ecoli_overlap_peptide)) %>%
+  filter(!(Stripped.Sequence %in% human_ecoli_overlap_peptide$V1)) %>%
   separate(col = Protein.Group, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
   inner_join(annotation) %>%
   inner_join(conditions_unique)
 
 spectronaut_14 <- spectronaut_14  %>%
-  filter(!(PEP.StrippedSequence %in% human_ecoli_overlap_peptide)) %>%
+  filter(!(PEP.StrippedSequence %in% human_ecoli_overlap_peptide$V1)) %>%
   rename(PG.QValue.Run_Wise = "PG.QValue (Run-Wise)", Precursor.Quantity = "EG.TotalQuantity (Settings)", Run = R.FileName) %>%
   mutate(Precursor.Id = paste0(EG.ModifiedSequence, FG.Charge)) %>%
   separate(col = PG.ProteinAccessions, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
@@ -134,7 +134,7 @@ spectronaut_14 <- spectronaut_14  %>%
   inner_join(conditions_unique)
 
 spectronaut_17 <- spectronaut_17  %>%
-  filter(!(PEP.StrippedSequence %in% human_ecoli_overlap_peptide)) %>%
+  filter(!(PEP.StrippedSequence %in% human_ecoli_overlap_peptide$V1)) %>%
   rename(PG.QValue.Run_Wise = "PG.QValue (Run-Wise)", Precursor.Quantity = "EG.TotalQuantity (Settings)", Run = R.FileName) %>%
   mutate(Precursor.Id = paste0(EG.ModifiedSequence, FG.Charge)) %>%
   separate(col = PG.ProteinAccessions, into = "Entry", sep = ";", remove = TRUE, extra = "drop") %>%
