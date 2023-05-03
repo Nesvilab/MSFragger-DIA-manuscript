@@ -42,7 +42,7 @@ setwd("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\results\\benchmark\\
 
 annotation <- read_tsv("G:\\Dropbox\\papers_Fengchao\\msfragger_dia\\script\\code\\MSFragger-DIA-manuscript\\uniprot.tab", col_select = c("Entry", "Entry name"))
 
-srcDir <- "./lfqbench_benchmark_2to1/"
+srcDir <- "./lfqbench_benchmark_2to1_protein/"
 unlink(srcDir, recursive = TRUE)
 mkdir(srcDir)
 
